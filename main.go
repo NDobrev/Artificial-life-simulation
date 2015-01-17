@@ -1,22 +1,22 @@
 package main
 
 import (
+	"Artificial-life-simulation/core"
 	"fmt"
 )
 
-type A struct {
-}
-
-func (a *A) g() {
-	fmt.Println("yae")
-}
-
-type B struct {
-	A
-}
-
 func main() {
-	var b B
-	b.g()
-	b.A.g()
+	a := core.NewField(100)
+	pla := core.NewPhytoPlankton()
+	var point core.FieldPoint
+	point.SetPoint(1, 1)
+	a.AddObject(point, pla)
+	fmt.Println("--------")
+	a.Print()
+	fmt.Println("--------")
+	for i := 0; i < 25; i++ {
+		a.OnTick()
+		//a.Print()
+	}
+	a.Print()
 }

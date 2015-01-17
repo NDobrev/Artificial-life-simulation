@@ -3,10 +3,10 @@ package core
 type EmptyPlace struct {
 }
 
-func (EmptyPlace *ep) GetCopy() *EmptyPlace {
+func (ep *EmptyPlace) GetCopy() FieldObject {
 	return new(EmptyPlace)
 }
 
-func (EmptyPlace *ep) GetType() ObjType {
+func (ep *EmptyPlace) GetType() ObjType {
 	return Empty
 }

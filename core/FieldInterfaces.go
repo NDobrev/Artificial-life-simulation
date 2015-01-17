@@ -1,10 +1,10 @@
 package core
 
 type FieldObject interface {
-	GetCopy() *FieldObject
-	GetType() *ObjType
+	GetCopy() FieldObject
+	GetType() ObjType
 }
 
 type DoableObject interface {
-	Do(f *Field)
+	Do(f *Field, myLocation FieldPoint)
 }

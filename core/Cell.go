@@ -1,5 +1,10 @@
 package core
 
+import (
+	"fmt"
+	"math/rand"
+)
+
 type PhytoPlankton struct {
 	age int
 }
@@ -10,24 +15,32 @@ func NewPhytoPlankton() *PhytoPlankton {
 	return result
 }
 
-func (pp *PhytoPlankton) GetCopy() *FieldObject {
+func (pp *PhytoPlankton) GetCopy() FieldObject {
 	result := new(PhytoPlankton)
 	result.age = pp.age
 	return result
 }
 
-func (pp *PhytoPlankton) GetType() *ObjType {
+func (pp *PhytoPlankton) GetType() ObjType {
 	return Plankton
 }
 
-func (pp *PhytoPlankton) Do(f *Field) {
+func (pp *PhytoPlankton) Do(f *Field, myLocation FieldPoint) {
 	if pp.TimeForReproduce() {
-
+		free := f.GetAllWithTypeInSquare(Empty, FieldPoint{myLocation.x - 1, myLocation.y - 1}, 3)
+		if len(free) != 0 {
+			//expand on random
+			pos := rand.Int() % len(free)
+			npp := NewPhytoPlankton()
+			f.AddObject(free[pos].location, npp)
+		}
 	}
 
 	if pp.TimeForDie() {
-
+		fmt.Println(myLocation.x, myLocation.y, "die")
+		f.RemoveFrom(myLocation)
 	}
+	pp.age++
 }
 
 func (pp *PhytoPlankton) TimeForDie() bool {
