@@ -11,7 +11,12 @@ func (a *A) g() {
 	fmt.Println("yae")
 }
 
+type B struct {
+	A
+}
+
 func main() {
-	var a A
-	a.g()
+	var b B
+	b.g()
+	b.A.g()
 }

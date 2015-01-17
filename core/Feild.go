@@ -33,10 +33,14 @@ func NewField(size int) *Field {
 }
 
 func (f *Field) AddObject(x int, y int, obj *FieldObject) bool {
+	if x < 0 || y < 0 || x > size || y > size {
+		return false
+	}
 	if f.matrix[x][y].GetType() == Empty {
 		return false
 	}
 	f.matrix[x][y] = obj
+	return true
 }
 
 func (f *Field) LookAt(x int, y int) *FieldObject {
@@ -56,27 +60,43 @@ func (f *Field) GetAllWithType(t ObjType) []*ObjLocator {
 }
 
 func (f *Field) MoveFromTo(from FieldPoint, to FieldPoint) bool {
+	if x < 0 || y < 0 || x > size || y > size {
+		return false
+	}
+
 	if f.matrix[to.x][to.y] == Empty {
 		f.matrix[to.x][to.y] = f.matrix[from.x][from.y]
 		var e EmptyPlace
 		f.matrix[from.x][from.y] = e.GetCopy()
+		return true
 	}
+
+	return false
 }
 
 func (f *Field) RemoveFrom(from FieldPoint) {
 	var e EmptyPlace
+	if x < 0 || y < 0 || x > size || y > size {
+		return
+	}
 	f.matrix[from.x][from.y] = e.GetCopy()
 }
 
-func (f *Field) ClearField(){
+func (f *Field) ClearField() {
 	var e EmptyPlace
 	for i := range f.matrix {
-		for j := i {
-			i = e.GetCopy()
+		for j := range i {
+			j = e.GetCopy()
 		}
 	}
 }
 
-
-
-
+func (f *Field) OnTick() {
+	for i := range f.matrix {
+		for j := range i {
+			if j.getType() > Dovable {
+				DoableObject(j).Do()
+			}
+		}
+	}
+}
