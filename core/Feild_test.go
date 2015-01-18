@@ -21,8 +21,8 @@ func TestAddObjInField(t *testing.T) {
 
 	f.AddObject(FieldPoint{2, 2}, NewPhytoPlankton())
 
-	if f.matrix[2][2].GetType() != Plankton {
-		t.Errorf("Type of field must be %i but we found %i", f.matrix[2][2].GetType(), Plankton)
+	if f.matrix[2][2].GetType() != PhytoPlanktonT {
+		t.Errorf("Type of field must be %i but we found %i", f.matrix[2][2].GetType(), PhytoPlanktonT)
 	}
 }
 
@@ -37,8 +37,8 @@ func TestLookAtWithCorrectPoint(t *testing.T) {
 		t.Errorf("We dont expected error", err)
 	}
 
-	if result.GetType() != Plankton {
-		t.Errorf("Type of field must be %i but we found %i", f.matrix[2][2].GetType(), Plankton)
+	if result.GetType() != PhytoPlanktonT {
+		t.Errorf("Type of field must be %i but we found %i", f.matrix[2][2].GetType(), PhytoPlanktonT)
 	}
 
 }
@@ -63,11 +63,11 @@ func TestMoveFromToWithCorrectPoint(t *testing.T) {
 	f.MoveFromTo(p, np)
 
 	if f.matrix[p.x][p.y].GetType() != Empty {
-		t.Errorf("Type of field must be %i but we found %i", f.matrix[p.x][p.y].GetType(), Plankton)
+		t.Errorf("Type of field must be %i but we found %i", f.matrix[p.x][p.y].GetType(), PhytoPlanktonT)
 	}
 
-	if f.matrix[np.x][np.y].GetType() != Plankton {
-		t.Errorf("Type of field must be %i but we found %i", f.matrix[np.x][np.y].GetType(), Plankton)
+	if f.matrix[np.x][np.y].GetType() != PhytoPlanktonT {
+		t.Errorf("Type of field must be %i but we found %i", f.matrix[np.x][np.y].GetType(), PhytoPlanktonT)
 	}
 
 }
@@ -79,8 +79,8 @@ func TestMoveFromToWithWrongPoint(t *testing.T) {
 	np := FieldPoint{1, 10}
 	f.MoveFromTo(p, np)
 
-	if f.matrix[p.x][p.y].GetType() != Plankton {
-		t.Errorf("Type of field must be %i but we found %i", f.matrix[p.x][p.y].GetType(), Plankton)
+	if f.matrix[p.x][p.y].GetType() != PhytoPlanktonT {
+		t.Errorf("Type of field must be %i but we found %i", f.matrix[p.x][p.y].GetType(), PhytoPlanktonT)
 	}
 
 }
@@ -97,14 +97,14 @@ func TestGetAllWithTypeInSquare(t *testing.T) {
 	f.AddObject(FieldPoint{2, 2}, NewPhytoPlankton())
 	f.AddObject(FieldPoint{1, 1}, NewPhytoPlankton())
 
-	result := f.GetAllWithTypeInSquare(Plankton, FieldPoint{2, 2}, 3)
+	result := f.GetAllWithTypeInSquare(PhytoPlanktonT, FieldPoint{2, 2}, 3)
 	if len(result) != 2 {
-		t.Errorf("We expected 2 cells with type Plankton, but we found", len(result))
+		t.Errorf("We expected 2 cells with type PhytoPlanktonT, but we found", len(result))
 	}
 
-	result = f.GetAllWithTypeInSquare(Plankton, FieldPoint{0, 0}, 3)
+	result = f.GetAllWithTypeInSquare(PhytoPlanktonT, FieldPoint{0, 0}, 3)
 
 	if len(result) != 1 {
-		t.Errorf("We expected 1 cells with type Plankton, but we found", len(result))
+		t.Errorf("We expected 1 cells with type PhytoPlanktonT, but we found", len(result))
 	}
 }

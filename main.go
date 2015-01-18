@@ -6,15 +6,21 @@ import (
 )
 
 func main() {
-	a := core.NewField(100)
+	a := core.NewField(50)
 	pla := core.NewPhytoPlankton()
 	var point core.FieldPoint
 	point.SetPoint(1, 1)
 	a.AddObject(point, pla)
-	fmt.Println("--------")
 	a.Print()
-	fmt.Println("--------")
-	for i := 0; i < 25; i++ {
+	for i := 0; i < 15000; i++ {
+		if i == 10 {
+			fmt.Println("befor")
+			a.Print()
+			a.RemoveFrom(point)
+			a.AddObject(point, core.NewZooPlankton())
+			fmt.Println("after")
+			a.Print()
+		}
 		a.OnTick()
 		//a.Print()
 	}

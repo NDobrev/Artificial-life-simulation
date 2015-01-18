@@ -11,6 +11,8 @@ type PhytoPlankton struct {
 func NewPhytoPlankton() *PhytoPlankton {
 	result := new(PhytoPlankton)
 	result.age = 0
+	result.deadTime = 10
+	result.reproductionTime = 3
 	return result
 }
 
@@ -21,7 +23,7 @@ func (pp *PhytoPlankton) GetCopy() FieldObject {
 }
 
 func (pp *PhytoPlankton) GetType() ObjType {
-	return Plankton
+	return PhytoPlanktonT
 }
 
 // noting spacial for now

@@ -34,14 +34,14 @@ func (c *Cell) Do(f *Field, myLocation FieldPoint) {
 }
 
 func (c *Cell) TimeForDie() bool {
-	if c.age == 10 {
+	if c.age == c.deadTime {
 		return true
 	}
 	return false
 }
 
 func (c *Cell) TimeForReproduce() bool {
-	if c.age%3 == 0 {
+	if c.age%c.reproductionTime == 0 {
 		return true
 	}
 	return false

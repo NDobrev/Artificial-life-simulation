@@ -125,10 +125,12 @@ func (f *Field) OnTick() {
 }
 
 func (f *Field) Print() {
+	fmt.Println("-------------")
 	for i := range f.matrix {
 		for j := range f.matrix[i] {
 			fmt.Print(f.matrix[i][j].GetType())
 		}
 		fmt.Println("")
 	}
+	fmt.Println("-------------")
 }

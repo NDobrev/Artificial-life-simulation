@@ -7,6 +7,9 @@ const (
 
 	Movable
 	Doable
-	Plankton
+	FirstPlankton
+	ZooPlanktonT
+	PhytoPlanktonT
+	LastPlankton
 	NumberOfTypes
 )
