@@ -4,8 +4,8 @@ import (
 	"testing"
 )
 
-func TestInit(t *testing.T) {
-	p := NewObjLocator(FieldPoint{2, 3}, EmptyPlace{})
+func TestObjLocatorInit(t *testing.T) {
+	p := NewObjLocator(FieldPoint{2, 3}, NewEmptyPlace())
 	if p == nil {
 		t.Errorf("Expected not null pointer")
 	}

@@ -1,33 +1,24 @@
 package core
 
 import (
-	"fmt"
 	"math/rand"
 )
 
-type PhytoPlankton struct {
-	age int
+type Cell struct {
+	age              int
+	deadTime         int
+	reproductionTime int
 }
 
-func NewPhytoPlankton() *PhytoPlankton {
-	result := new(PhytoPlankton)
-	result.age = 0
-	return result
+func NewCell(deadTime int, reproductionTime int) {
+	result := new(Cell)
+	result.deadTime = deadTime
+	result.reproductionTime = reproductionTime
 }
 
-func (pp *PhytoPlankton) GetCopy() FieldObject {
-	result := new(PhytoPlankton)
-	result.age = pp.age
-	return result
-}
-
-func (pp *PhytoPlankton) GetType() ObjType {
-	return Plankton
-}
-
-func (pp *PhytoPlankton) Do(f *Field, myLocation FieldPoint) {
-	if pp.TimeForReproduce() {
-		free := f.GetAllWithTypeInSquare(Empty, FieldPoint{myLocation.x - 1, myLocation.y - 1}, 3)
+func (c *Cell) Do(f *Field, myLocation FieldPoint) {
+	if c.TimeForReproduce() {
+		free := f.GetAllWithTypeInSquare(Empty, FieldPoint{myLocation.x, myLocation.y}, 3)
 		if len(free) != 0 {
 			//expand on random
 			pos := rand.Int() % len(free)
@@ -36,22 +27,21 @@ func (pp *PhytoPlankton) Do(f *Field, myLocation FieldPoint) {
 		}
 	}
 
-	if pp.TimeForDie() {
-		fmt.Println(myLocation.x, myLocation.y, "die")
+	if c.TimeForDie() {
 		f.RemoveFrom(myLocation)
 	}
-	pp.age++
+	c.age++
 }
 
-func (pp *PhytoPlankton) TimeForDie() bool {
-	if pp.age == 10 {
+func (c *Cell) TimeForDie() bool {
+	if c.age == 10 {
 		return true
 	}
 	return false
 }
 
-func (pp *PhytoPlankton) TimeForReproduce() bool {
-	if pp.age%3 == 0 {
+func (c *Cell) TimeForReproduce() bool {
+	if c.age%3 == 0 {
 		return true
 	}
 	return false
