@@ -7,10 +7,9 @@
   
 ## Usage
 
-package main
-
-
 ```go
+
+package main
 import (
 	"Artificial-life-simulation/core"
 	"Artificial-life-simulation/gui"
