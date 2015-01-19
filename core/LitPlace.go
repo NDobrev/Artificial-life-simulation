@@ -4,7 +4,6 @@ type LitPlace struct {
 	lightIntensity int
 }
 
-/*
 func NewLitPlace(LightIntensity int) *LitPlace {
 	result := new(LitPlace)
 	result.lightIntensity = LightIntensity
@@ -14,9 +13,9 @@ func NewLitPlace(LightIntensity int) *LitPlace {
 func (lp *LitPlace) GetCopy() FieldObject {
 	result := new(LitPlace)
 	result.lightIntensity = lp.lightIntensity
+	return result
 }
 
-func (ep *EmptyPlace) GetType() ObjType {
-	return Empty
+func (lp *LitPlace) GetType() ObjType {
+	return LightSpace
 }
-*/

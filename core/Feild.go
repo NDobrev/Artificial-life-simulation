@@ -14,14 +14,14 @@ func NewField(size int) *Field {
 	result := new(Field)
 	result.size = size
 	result.matrix = make([][]FieldObject, size)
-
-	// init matrix field
 	for i := range result.matrix {
 		result.matrix[i] = make([]FieldObject, size)
-		for j := range result.matrix[i] {
-			result.matrix[i][j] = NewEmptyPlace()
-		}
 	}
+
+	filler := func() FieldObject {
+		return NewEmptyPlace()
+	}
+	FillFieldWith(result.matrix, filler)
 	return result
 }
 
@@ -29,7 +29,7 @@ func (f *Field) AddObject(p FieldPoint, obj FieldObject) bool {
 	if !f.checkCorectPoint(p) {
 		return false
 	}
-	if f.matrix[p.x][p.y].GetType() != Empty {
+	if !IsReplaceble(f.matrix[p.x][p.y]) {
 		return false
 	}
 	f.matrix[p.x][p.y] = obj

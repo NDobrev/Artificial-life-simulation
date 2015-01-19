@@ -21,3 +21,11 @@ type FieldBase interface {
 	OnTick()
 	Print()
 }
+
+func FillFieldWith(matrix [][]FieldObject, filler func() FieldObject) {
+	for i := range matrix {
+		for j := range matrix[i] {
+			matrix[i][j] = filler()
+		}
+	}
+}
