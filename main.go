@@ -12,19 +12,15 @@ func main() {
 	var point core.FieldPoint
 	point.SetPoint(1, 1)
 	a.AddObject(point, pla)
-	//	a.Print()
-	for i := 0; i < 150; i++ {
+	for i := 0; i < 1500; i++ {
 		if i == 10 {
-			//	fmt.Println("befor")
-			//a.Print()
-			//a.RemoveFrom(point)
+			a.RemoveFrom(point)
 			a.AddObject(point, core.NewZooPlankton())
-			//fmt.Println("after")
-			//a.Print()
 		}
 		a.OnTick()
-		//a.Print()
+
 	}
+	a.Print()
 	gui.WinGuiMain()
-	//a.Print()
+
 }

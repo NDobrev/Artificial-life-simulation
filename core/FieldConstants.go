@@ -3,9 +3,16 @@ package core
 type ObjType int
 
 const (
-	Empty ObjType = iota
+	None ObjType = iota
+
+	//Replaceble object
+	FirstReplaceble
+	Empty
+	LightSpace
+	LastReplaceble
 
 	Movable
+
 	Doable
 	FirstPlankton
 	ZooPlanktonT

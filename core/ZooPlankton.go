@@ -29,10 +29,10 @@ func (zp *ZooPlankton) GetType() ObjType {
 	return ZooPlanktonT
 }
 
-func (zp *ZooPlankton) Do(f *Field, myLocation FieldPoint) {
+func (zp *ZooPlankton) Do(f FieldBase, myLocation FieldPoint) {
 	// try too eat "Grrrr fresh meat"
 	// search for phyto plankton
-	pp := f.GetAllWithTypeInSquare(PhytoPlanktonT, myLocation, 3)
+	pp := f.GetAllWithTypeInSquare(GenFuncForObjType(PhytoPlanktonT), myLocation, 3)
 	if len(pp) > 0 {
 		// eat with 50% rate
 		if rand.Int()%2 == 0 {
@@ -46,7 +46,7 @@ func (zp *ZooPlankton) Do(f *Field, myLocation FieldPoint) {
 		return
 	}
 
-	free := f.GetAllWithTypeInSquare(Empty, FieldPoint{myLocation.x, myLocation.y}, 3)
+	free := f.GetAllWithTypeInSquare(IsReplaceble, FieldPoint{myLocation.x, myLocation.y}, 3)
 	if len(free) > 0 {
 		if zp.TimeForReproduce() && zp.energy > 5 {
 			//expand on random

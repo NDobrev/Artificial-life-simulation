@@ -44,7 +44,8 @@ func (f *Field) LookAt(p FieldPoint) (FieldObject, error) {
 }
 
 func (f *Field) GetAllWithType(t ObjType) []*ObjLocator {
-	return f.GetAllWithTypeInSquare(t, FieldPoint{0, 0}, f.size)
+
+	return f.GetAllWithTypeInSquare(GenFuncForObjType(t), FieldPoint{0, 0}, f.size)
 }
 
 func (f *Field) checkCorectPoint(p FieldPoint) bool {
@@ -54,7 +55,7 @@ func (f *Field) checkCorectPoint(p FieldPoint) bool {
 	return true
 }
 
-func (f *Field) GetAllWithTypeInSquare(t ObjType, center FieldPoint, size int) []*ObjLocator {
+func (f *Field) GetAllWithTypeInSquare(comp func(FieldObject) bool, center FieldPoint, size int) []*ObjLocator {
 	result := make([]*ObjLocator, 0)
 
 	topLeft := NewFieldPoint(center.x-size/2, center.y-size/2)
@@ -76,7 +77,7 @@ func (f *Field) GetAllWithTypeInSquare(t ObjType, center FieldPoint, size int) [
 	toY := min(f.size, topLeft.y+size)
 	for i := fromX; i < toX; i++ {
 		for j := fromY; j < toY; j++ {
-			if f.matrix[i][j].GetType() == t {
+			if comp(f.matrix[i][j]) {
 				o := NewObjLocator(FieldPoint{i, j}, f.matrix[i][j])
 				result = append(result, o)
 			}
@@ -125,10 +126,26 @@ func (f *Field) OnTick() {
 }
 
 func (f *Field) Print() {
+
+	maping := func(ot ObjType) string {
+		switch ot {
+		case Empty:
+			return "E"
+		case LightSpace:
+			return "L"
+
+		case ZooPlanktonT:
+			return "Z"
+		case PhytoPlanktonT:
+			return "P"
+		default:
+			return "Nan"
+		}
+	}
 	fmt.Println("-------------")
 	for i := range f.matrix {
 		for j := range f.matrix[i] {
-			fmt.Print(f.matrix[i][j].GetType())
+			fmt.Print(maping(f.matrix[i][j].GetType()))
 		}
 		fmt.Println("")
 	}

@@ -97,12 +97,12 @@ func TestGetAllWithTypeInSquare(t *testing.T) {
 	f.AddObject(FieldPoint{2, 2}, NewPhytoPlankton())
 	f.AddObject(FieldPoint{1, 1}, NewPhytoPlankton())
 
-	result := f.GetAllWithTypeInSquare(PhytoPlanktonT, FieldPoint{2, 2}, 3)
+	result := f.GetAllWithTypeInSquare(GenFuncForObjType(PhytoPlanktonT), FieldPoint{2, 2}, 3)
 	if len(result) != 2 {
 		t.Errorf("We expected 2 cells with type PhytoPlanktonT, but we found", len(result))
 	}
 
-	result = f.GetAllWithTypeInSquare(PhytoPlanktonT, FieldPoint{0, 0}, 3)
+	result = f.GetAllWithTypeInSquare(GenFuncForObjType(PhytoPlanktonT), FieldPoint{0, 0}, 3)
 
 	if len(result) != 1 {
 		t.Errorf("We expected 1 cells with type PhytoPlanktonT, but we found", len(result))

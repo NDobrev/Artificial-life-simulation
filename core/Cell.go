@@ -16,9 +16,9 @@ func NewCell(deadTime int, reproductionTime int) {
 	result.reproductionTime = reproductionTime
 }
 
-func (c *Cell) Do(f *Field, myLocation FieldPoint) {
+func (c *Cell) Do(f FieldBase, myLocation FieldPoint) {
 	if c.TimeForReproduce() {
-		free := f.GetAllWithTypeInSquare(Empty, FieldPoint{myLocation.x, myLocation.y}, 3)
+		free := f.GetAllWithTypeInSquare(IsReplaceble, FieldPoint{myLocation.x, myLocation.y}, 3)
 		if len(free) != 0 {
 			//expand on random
 			pos := rand.Int() % len(free)
