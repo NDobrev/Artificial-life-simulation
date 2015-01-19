@@ -2,7 +2,8 @@ package main
 
 import (
 	"Artificial-life-simulation/core"
-	"fmt"
+	"Artificial-life-simulation/gui"
+	//"fmt"
 )
 
 func main() {
@@ -11,18 +12,19 @@ func main() {
 	var point core.FieldPoint
 	point.SetPoint(1, 1)
 	a.AddObject(point, pla)
-	a.Print()
-	for i := 0; i < 15000; i++ {
+	//	a.Print()
+	for i := 0; i < 150; i++ {
 		if i == 10 {
-			fmt.Println("befor")
-			a.Print()
-			a.RemoveFrom(point)
+			//	fmt.Println("befor")
+			//a.Print()
+			//a.RemoveFrom(point)
 			a.AddObject(point, core.NewZooPlankton())
-			fmt.Println("after")
-			a.Print()
+			//fmt.Println("after")
+			//a.Print()
 		}
 		a.OnTick()
 		//a.Print()
 	}
-	a.Print()
+	gui.WinGuiMain()
+	//a.Print()
 }
