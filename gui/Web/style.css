@@ -1,0 +1,21 @@
+td {
+    width: 6px;
+    height: 6px;
+    border: 1px solid green;
+}
+
+.free {
+    background-color: white;
+}
+
+.snake {
+    background-color: black;
+}
+
+.fruit {
+    background-color: red;
+}
+
+.tail {
+    background-color: magenta;
+}
