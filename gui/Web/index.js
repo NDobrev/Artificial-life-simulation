@@ -11,6 +11,15 @@ Point.prototype.copy = function () {
     return new Point(this.x, this.y);
 }
 
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) { // otgovora e gotov
+        // tuka e json-a, moe6 da go prai6 kvot si iska6
+        alert(xhr.responseText);
+    }
+}
+xhr.open('GET', 'http://localhost:8090/matrix', true);
+xhr.send();
 
 // fill table
 function FillTable(mapSize) {
@@ -30,4 +39,4 @@ function FillTable(mapSize) {
     }
 }
 
-FillTable(70)
+//FillTable(70)
