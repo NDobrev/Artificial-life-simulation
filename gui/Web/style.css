@@ -1,7 +1,6 @@
 td {
-    width: 6px;
-    height: 6px;
-    border: 1px solid green;
+    width: 3px;
+    height: 3px;
 }
 
 .free {
@@ -19,3 +18,26 @@ td {
 .tail {
     background-color: magenta;
 }
+
+#butt {
+    background-color: #ccc;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius:6px;
+    color: #fff;
+    font-family: 'Oswald';
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border:none;
+}
+
+
+
+#butt:hover {
+    border: none;
+    background:red;
+    box-shadow: 0px 0px 1px #777;
+}
+
+
