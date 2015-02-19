@@ -118,20 +118,21 @@ func (f *Field) ClearField() {
 func (f *Field) OnTick() {
 	for i := range f.matrix {
 		for j := range f.matrix[i] {
-			if f.matrix[i][j].GetType() > Doable {
+			if f.matrix[i][j].GetType() > FirstDoable {
 				f.matrix[i][j].(DoableObject).Do(f, FieldPoint{i, j})
 			}
 		}
 	}
 }
 
+/*This suck but for now is ok */
 func (f *Field) Print() {
 
 	maping := func(ot ObjType) string {
 		switch ot {
 		case Empty:
 			return "E"
-		case LightSpace:
+		case LitSpaceT:
 			return "L"
 
 		case ZooPlanktonT:
@@ -150,4 +151,74 @@ func (f *Field) Print() {
 		fmt.Println("")
 	}
 	fmt.Println("-------------")
+}
+func clamp(x uint) uint {
+	if x > 255 {
+		x = 255
+	}
+	return x
+}
+
+func rgb(r, g, b uint) uint {
+	return (clamp(r) << 16) | (clamp(g) << 8) | clamp(b)
+}
+
+func (f *Field) objRepresentation(obj FieldObject) uint {
+
+	AgeMapingMutatable := func(age int, ded int) uint {
+		result := rgb(0, uint(age*20), uint(ded*10))
+		return result
+	}
+
+	AgeMapingPhyto := func(age int) uint {
+		return rgb(0, uint(age*age), 0)
+	}
+	AgeMapingZoo := func(age int) uint {
+		return rgb(uint(age*age), 0, 0)
+	}
+	AgeMappingPred := func(age int) uint {
+		return rgb(uint(age*age), 0, uint(age*age))
+	}
+
+	maping := func(ot ObjType) uint {
+		switch ot {
+		case Empty:
+			return rgb(0, 0, 0)
+		case LitSpaceT:
+			return rgb(255, 160, 0)
+		case RockT:
+			return rgb(255, 255, 255)
+		default:
+			return 0
+		}
+	}
+
+	switch obj.GetType() {
+	case ZooPlanktonT:
+		//fmt.Println("Z")
+		return AgeMapingZoo(obj.(*ZooPlankton).GetAge())
+	case PhytoPlanktonT:
+		//fmt.Println("P")
+		return AgeMapingPhyto(obj.(*PhytoPlankton).GetAge())
+	case PredatoryPlanktonT:
+		return AgeMappingPred(obj.(*PredatoryPlankton).GetAge())
+	case LightSensitivePlanktonT:
+		result := AgeMapingMutatable(obj.(*LightSensitivePlankton).GetAge(), obj.(*LightSensitivePlankton).deadTime)
+		return result
+	default:
+		//fmt.Println("N")
+		return maping(obj.GetType())
+
+	}
+	//fmt.Println("Lo6o")
+	return 0
+}
+
+func (f *Field) ColorRepresentation(colors [][]uint) {
+
+	for i := range f.matrix {
+		for j := range f.matrix[i] {
+			colors[i][j] = f.objRepresentation(f.matrix[i][j])
+		}
+	}
 }

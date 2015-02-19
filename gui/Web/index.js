@@ -11,6 +11,11 @@ Point.prototype.copy = function () {
     return new Point(this.x, this.y);
 }
 
+function toColor(num) {
+    num >>>= 0;
+    return '#' + num.toString(16);
+}
+
 var xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) { // otgovora e gotov
@@ -23,7 +28,7 @@ xhr.onreadystatechange = function() {
                 var id = (new Point(i, j)).string();
                 var element = document.getElementById(id);
                 //console.log(element)
-                element.style.backgroundColor = colors[i][j].toString();
+                element.style.backgroundColor = toColor(colors[i][j]);
             }
         }
     }

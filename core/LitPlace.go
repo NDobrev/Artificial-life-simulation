@@ -17,5 +17,5 @@ func (lp *LitPlace) GetCopy() FieldObject {
 }
 
 func (lp *LitPlace) GetType() ObjType {
-	return LightSpace
+	return LitSpaceT
 }

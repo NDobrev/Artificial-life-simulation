@@ -46,3 +46,7 @@ func (c *Cell) TimeForReproduce() bool {
 	}
 	return false
 }
+
+func (c *Cell) GetAge() int {
+	return c.age
+}

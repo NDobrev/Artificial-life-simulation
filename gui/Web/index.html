@@ -3,14 +3,97 @@
 <head>
     <meta charset="utf-8">
     <title>Artificial-Life-Simulator</title>
-    <script type="text/javascript" src="index.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css"> 
-	
-	<button <input type="butt" name="butt" value="Submit Application" id="butt" onclick=Fast()>Faster 
-	</button>
-	<button <input type="butt" name="butt" value="Submit Application" id="butt"  onclick=Slow()>Slower 
-	</button>
-	<button <input type="butt" name="butt" value="Submit Application" id="butt"  onclick=Reset()>Reset
-	</button>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        var DELAY = 500, URL = 'http://localhost:8090/';
+
+        $(document).ready(function () {
+            var canvas = $('#field').get(0);
+
+            canvas.width = 800;
+            canvas.height = 800;
+
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = "#000000";
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 1;
+
+
+
+            setTimeout(function repeater() {
+                $.get(URL + 'matrix').done(function(data) {
+                    
+                    data = JSON.parse(data).Colors;
+                    var cols = data.length,
+                        rows = data[0].length;
+
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    var cell_width = canvas.width / cols,
+                        cell_height = canvas.height / rows;
+
+                    for (var c = 0; c < cols; ++c) {
+                        for (var r = 0; r < rows; ++r) {
+                            ctx.fillStyle = (function(color) {
+                                color = color.toString(16);
+                                return'#' + ['0', '0', '0', '0', '0', '0'].slice(0, 6 - color.length).join('') + color;
+                            })(data[c][r]);
+
+                            ctx.fillRect(c * cell_width, r * cell_height, cell_width, cell_height);
+                        }
+                    }
+                });
+                setTimeout(repeater, DELAY);
+            }, DELAY);
+
+
+            $('.fast').click(function() {
+                DELAY -= 100;
+                console.log(DELAY);
+            });
+
+            $('.slow').click(function() {
+                DELAY += 100;
+                console.log(DELAY);
+            });
+
+            $('.reset').click(function() {
+                $.post(URL + 'reset');
+            });
+        });
+
+    </script>
+
+
+    <style type="text/css">
+        button {
+            background-color: #ccc;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius:6px;
+            color: #fff;
+            font-family: 'Oswald';
+            font-size: 20px;
+            text-decoration: none;
+            cursor: pointer;
+            border:none;
+        }
+
+        button:hover {
+            border: none;
+            background:red;
+            box-shadow: 0px 0px 1px #777;
+        }
+
+        canvas {
+            float: left;
+            margin-top: 20px;
+        }
+    </style>
 </head>
+<body>
+    <button class='fast'>Faster</button>
+    <button class='slow'>Slower</button>
+    <button class='reset'>Reset</button>
+    <canvas id="field"></canvas>
+</body>
 </html>

@@ -7,21 +7,22 @@ import (
 	"fmt"
 	"runtime"
 	//"go/build"
+	//"math"
 	"net/http"
 	//"sync"
 )
 
 type FieldColorRepresentation struct {
-	Colors [][]string
+	Colors [][]uint
 	//sync.Mutex
 }
 
 func MakeMatrix(width, height int) *FieldColorRepresentation {
-	a := make([][]string, height)
+	a := make([][]uint, height)
 	for i := range a {
-		a[i] = make([]string, width)
+		a[i] = make([]uint, width)
 		for j := range a[i] {
-			a[i][j] = "white"
+			a[i][j] = 0
 		}
 	}
 
@@ -77,37 +78,27 @@ func BuildWall(f core.FieldBase) {
 	}
 }
 
+func SumMod20(x int, y int) int {
+	return x + y
+}
+
 func main() {
 	runtime.GOMAXPROCS(4)
 	fmt.Println("start")
-	a := core.NewLitField(140, 140)
+	a := core.NewLitFieldWithFillWithFunction(140, SumMod20)
 	StartGuiServer()
 
 	fmt.Println("startGUIServer done")
 	fmt.Println("Init field done")
+
 	for {
-		pla := core.NewPhytoPlankton()
-		BuildWall(a)
+		pla := core.NewLightSensitivePlankton()
 		var point core.FieldPoint
-		point.SetPoint(20, 35)
-		a.AddObject(point, pla)
-		point.SetPoint(50, 35)
+		point.SetPoint(1, 1)
 		a.AddObject(point, pla)
 
-		i := 0
 		b := true
 		for b {
-			i++
-
-			if i == 25 {
-				a.RemoveFrom(point)
-				zo := core.NewZooPlankton()
-				a.AddObject(point, zo)
-			} else if i == 75 {
-				a.RemoveFrom(point)
-				pre := core.NewPredatoryPlankton()
-				a.AddObject(point, pre)
-			}
 			select {
 			case _ = <-req.update:
 				a.ColorRepresentation(colors.Colors)
