@@ -165,19 +165,23 @@ func rgb(r, g, b uint) uint {
 
 func (f *Field) objRepresentation(obj FieldObject) uint {
 
-	AgeMapingMutatable := func(age int, ded int) uint {
-		result := rgb(0, uint(age*20), uint(ded*10))
+	AgeMapingMutatable := func(age int, rep int) uint {
+		result := rgb(0, uint(age*20), 255-uint(rep))
 		return result
 	}
 
 	AgeMapingPhyto := func(age int) uint {
-		return rgb(0, uint(age*age), 0)
+		return rgb(0, uint(age*10), 0)
 	}
 	AgeMapingZoo := func(age int) uint {
-		return rgb(uint(age*age), 0, 0)
+		return rgb(uint(age*10), 0, 0)
 	}
 	AgeMappingPred := func(age int) uint {
-		return rgb(uint(age*age), 0, uint(age*age))
+		return rgb(uint(age*10), 0, uint(age*10))
+	}
+
+	LightMaping := func(lightPower int) uint {
+		return rgb(255, 255, uint(lightPower*5))
 	}
 
 	maping := func(ot ObjType) uint {
@@ -203,8 +207,9 @@ func (f *Field) objRepresentation(obj FieldObject) uint {
 	case PredatoryPlanktonT:
 		return AgeMappingPred(obj.(*PredatoryPlankton).GetAge())
 	case LightSensitivePlanktonT:
-		result := AgeMapingMutatable(obj.(*LightSensitivePlankton).GetAge(), obj.(*LightSensitivePlankton).deadTime)
-		return result
+		return AgeMapingMutatable(obj.(*LightSensitivePlankton).GetAge(), obj.(*LightSensitivePlankton).lightPreferenceMax+obj.(*LightSensitivePlankton).lightPreferenceMin)
+	case LitSpaceT:
+		return LightMaping(obj.(*LitPlace).lightIntensity)
 	default:
 		//fmt.Println("N")
 		return maping(obj.GetType())

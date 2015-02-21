@@ -13,7 +13,7 @@ func NewPhytoPlankton() *PhytoPlankton {
 	result := new(PhytoPlankton)
 	result.age = 0
 	result.deadTime = 10
-	result.reproductionTime = 3
+	result.reproductionTime = 5
 	return result
 }
 
@@ -38,10 +38,10 @@ type LightSensitivePlankton struct {
 func NewLightSensitivePlankton() *LightSensitivePlankton {
 	result := new(LightSensitivePlankton)
 	result.age = 0
-	result.deadTime = rand.Int() % 20
-	result.reproductionTime = rand.Int() % 5
-	result.lightPreferenceMin = rand.Int() % 10
-	result.lightPreferenceMax = rand.Int() % 200
+	result.deadTime = 30
+	result.reproductionTime = 9
+	result.lightPreferenceMin = 0
+	result.lightPreferenceMax = 5
 	result.mutationRate = 15
 	return result
 }
@@ -49,8 +49,8 @@ func NewLightSensitivePlankton() *LightSensitivePlankton {
 func (lsp *LightSensitivePlankton) GenChild() *LightSensitivePlankton {
 	result := new(LightSensitivePlankton)
 	result.age = 0
-	result.deadTime = 10
-	result.reproductionTime = 3
+	result.deadTime = lsp.deadTime
+	result.reproductionTime = lsp.reproductionTime
 	result.lightPreferenceMin = lsp.lightPreferenceMin
 	result.lightPreferenceMax = lsp.lightPreferenceMax
 	result.mutationRate = lsp.mutationRate
@@ -74,7 +74,7 @@ func (lsp *LightSensitivePlankton) Do(f FieldBase, myLocation FieldPoint) {
 		f.AddObject(free[pos].location, npp)
 	}
 
-	if lsp.TimeForDie() {
+	if lsp.TimeForDie() || lsp.lightPreferenceMax-lsp.lightPreferenceMin > 7 {
 		f.RemoveFrom(myLocation)
 	}
 	lsp.Mutate()

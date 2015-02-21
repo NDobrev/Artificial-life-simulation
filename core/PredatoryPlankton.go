@@ -14,7 +14,7 @@ func NewPredatoryPlankton() *PredatoryPlankton {
 	result := new(PredatoryPlankton)
 	result.age = 0
 	result.deadTime = 10
-	result.reproductionTime = 5
+	result.reproductionTime = 2
 	result.energy = 5
 	result.speed = 7
 	return result
@@ -38,9 +38,9 @@ func (pp *PredatoryPlankton) Do(f FieldBase, myLocation FieldPoint) {
 	targets := f.GetAllWithTypeInSquare(GenFuncForObjType(ZooPlanktonT), myLocation, pp.speed)
 	if len(targets) > 0 {
 		// eat with  rate
-		if rand.Int()%100 < 88 {
+		if rand.Int()%100 < 80 {
 			pos := rand.Int() % len(targets)
-			pp.energy += targets[pos].obj.(*ZooPlankton).energy + 5
+			pp.energy += targets[pos].obj.(*ZooPlankton).energy + 3
 			f.RemoveFrom(targets[pos].location)
 		}
 	}

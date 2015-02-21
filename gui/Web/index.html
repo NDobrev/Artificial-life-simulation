@@ -56,8 +56,43 @@
                 console.log(DELAY);
             });
 
+
             $('.reset').click(function() {
                 $.post(URL + 'reset');
+            });
+
+
+           $('.CommonPhytoPlankton').click(function() {
+                var butx = document.getElementById("ByX");
+                var buty = document.getElementById("ByY");
+                var xx = butx.value;
+                var yy = buty.value;
+                $.post(URL + 'CommonPhytoPlankton', {x: xx,y: yy}, "json");
+            });
+
+           $('.LightSensitivePlankton').click(function() {
+                var butx = document.getElementById("ByX");
+                var buty = document.getElementById("ByY");
+                var xx = butx.value;
+                var yy = buty.value;
+                $.post(URL + 'LightSensitivePlankton', {x: xx,y: yy}, "json");
+
+            });
+
+           $('.ZooPlankton').click(function() {
+                var butx = document.getElementById("ByX");
+                var buty = document.getElementById("ByY");
+                var xx = butx.value;
+                var yy = buty.value;
+                $.post(URL + 'ZooPlankton', {x: xx,y: yy}, "json");
+            });
+
+           $('.PredatoryPlankton').click(function() {
+                var butx = document.getElementById("ByX");
+                var buty = document.getElementById("ByY");
+                var xx = butx.value;
+                var yy = buty.value;
+                $.post(URL + 'PredatoryPlankton', {x: xx,y: yy}, "json");
             });
         });
 
@@ -88,12 +123,31 @@
             float: left;
             margin-top: 20px;
         }
+
+        nav ul ul {
+            display: none;
+        }
+
+        nav ul li:hover > ul {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
     <button class='fast'>Faster</button>
     <button class='slow'>Slower</button>
     <button class='reset'>Reset</button>
+    </br></br>
+    <button class='CommonPhytoPlankton'>CommonPhytoPlankton</button>
+    <button class='LightSensitivePlankton'>LightSensitivePlankton</button>
+    <button class='ZooPlankton'>ZooPlankton</button>
+    <button class='PredatoryPlankton'>PredatoryPlankton</button> 
+    </br></br>
+    X: <input type="text" Id="ByX">
+    Y: <input type="text" id="ByY">
+    </br></br>
     <canvas id="field"></canvas>
+
 </body>
 </html>

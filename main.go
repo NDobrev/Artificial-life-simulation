@@ -5,11 +5,10 @@ import (
 	"Artificial-life-simulation/gui/server"
 	"encoding/json"
 	"fmt"
-	"runtime"
-	//"go/build"
-	//"math"
+	"math"
 	"net/http"
-	//"sync"
+	"runtime"
+	"strconv"
 )
 
 type FieldColorRepresentation struct {
@@ -31,10 +30,16 @@ func MakeMatrix(width, height int) *FieldColorRepresentation {
 
 var colors *FieldColorRepresentation
 
+type ObjectRequestData struct {
+	x, y int64
+	t    core.ObjType
+}
+
 type sn struct {
 	update chan interface{}
 	rdy    chan interface{}
 	reset  chan interface{}
+	setReq chan ObjectRequestData
 }
 
 func snInit() *sn {
@@ -42,10 +47,21 @@ func snInit() *sn {
 	result.update = make(chan interface{})
 	result.rdy = make(chan interface{})
 	result.reset = make(chan interface{})
+	result.setReq = make(chan ObjectRequestData)
 	return result
 }
 
 var req *sn
+
+func SendRequest(r *http.Request, t core.ObjType) {
+	var ord ObjectRequestData
+	r.ParseForm()
+	ord.x, _ = strconv.ParseInt(r.PostFormValue("x"), 0, 64)
+	ord.y, _ = strconv.ParseInt(r.PostFormValue("y"), 0, 64)
+	ord.t = t
+	fmt.Println(ord)
+	req.setReq <- ord
+}
 
 func StartGuiServer() {
 	var s server.Server
@@ -62,9 +78,33 @@ func StartGuiServer() {
 	}
 
 	ResetSimulationRequest := func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Reset")
 		req.reset <- struct{}{}
 	}
+
+	CommonPhytoPlankton := func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("New CommonPhytoPlankton")
+		SendRequest(r, core.PhytoPlanktonT)
+	}
+
+	LightSensitivePlankton := func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("New LightSensitivePlankton")
+		SendRequest(r, core.LightSensitivePlanktonT)
+	}
+
+	ZooPlankton := func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("New ZooPlankton")
+		SendRequest(r, core.ZooPlanktonT)
+	}
+
+	PredatoryPlankton := func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("New PredatoryPlankton")
+		SendRequest(r, core.PredatoryPlanktonT)
+	}
+
+	s.RegisterFunc("/CommonPhytoPlankton", CommonPhytoPlankton)
+	s.RegisterFunc("/LightSensitivePlankton", LightSensitivePlankton)
+	s.RegisterFunc("/ZooPlankton", ZooPlankton)
+	s.RegisterFunc("/PredatoryPlankton", PredatoryPlankton)
 	s.RegisterFunc("/reset", ResetSimulationRequest)
 	s.RegisterFunc("/matrix", matrixRequest)
 	go s.Run()
@@ -79,7 +119,34 @@ func BuildWall(f core.FieldBase) {
 }
 
 func SumMod20(x int, y int) int {
-	return x + y
+	r := float64((70-x)*(70-x) + (70-y)*(70-y))
+	r = math.Sqrt(r)
+	//fmt.Println(40 - r)
+
+	return int(r)
+}
+
+func Execute(f core.FieldBase, ord ObjectRequestData) {
+	fp := core.NewFieldPoint(int(ord.x), int(ord.y))
+	var fo core.FieldObject
+	switch ord.t {
+	case core.ZooPlanktonT:
+		fo = core.NewZooPlankton()
+	case core.PhytoPlanktonT:
+		fo = core.NewPhytoPlankton()
+	case core.PredatoryPlanktonT:
+		fo = core.NewPredatoryPlankton()
+	case core.LightSensitivePlanktonT:
+		fo = core.NewLightSensitivePlankton()
+	case core.LitSpaceT:
+		fo = core.NewLitPlace(SumMod20(int(ord.x), int(ord.y)))
+	case core.RockT:
+		fo = core.NewRock()
+	case core.Empty:
+		fo = core.NewEmptyPlace()
+	}
+	f.RemoveFrom(*fp)
+	f.AddObject(*fp, fo)
 }
 
 func main() {
@@ -92,12 +159,8 @@ func main() {
 	fmt.Println("Init field done")
 
 	for {
-		pla := core.NewLightSensitivePlankton()
-		var point core.FieldPoint
-		point.SetPoint(1, 1)
-		a.AddObject(point, pla)
-
 		b := true
+		a.ClearField()
 		for b {
 			select {
 			case _ = <-req.update:
@@ -106,7 +169,8 @@ func main() {
 			case _ = <-req.reset:
 				b = false
 				a.ClearField()
-				//default:
+			case obj := <-req.setReq:
+				Execute(a, obj)
 			}
 			//fmt.Println(i)
 			a.OnTick()
