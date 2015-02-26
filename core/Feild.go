@@ -91,7 +91,7 @@ func (f *Field) MoveFromTo(from FieldPoint, to FieldPoint) bool {
 		return false
 	}
 
-	if f.matrix[to.x][to.y].GetType() == Empty {
+	if IsReplaceble(f.matrix[to.x][to.y]) {
 		f.matrix[to.x][to.y] = f.matrix[from.x][from.y]
 		f.matrix[from.x][from.y] = NewEmptyPlace()
 		return true
@@ -192,8 +192,10 @@ func (f *Field) objRepresentation(obj FieldObject) uint {
 			return rgb(255, 160, 0)
 		case RockT:
 			return rgb(255, 255, 255)
+		case SwarmUnitT:
+			return rgb(255, 0, 255)
 		default:
-			return 0
+			return rgb(255, 255, 255)
 		}
 	}
 

@@ -1,7 +1,7 @@
 package core
 
 type FieldObject interface {
-	GetCopy() FieldObject
+	//GetCopy() FieldObject
 	GetType() ObjType
 }
 

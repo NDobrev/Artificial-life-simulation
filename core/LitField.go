@@ -1,6 +1,8 @@
 package core
 
-import ()
+import (
+	"fmt"
+)
 
 type LitField struct {
 	lightIntensity int
@@ -54,12 +56,31 @@ func (lf *LitField) RemoveFrom(from FieldPoint) {
 }
 
 func (lf *LitField) OnTick() {
-	for i := range lf.matrix {
-		for j := range lf.matrix[i] {
+
+	type ObjLoc struct {
+		fo FieldObject
+		po FieldPoint
+	}
+
+	first := GenRandomVector(lf.size)
+	second := GenRandomVector(lf.size)
+	lim := make([]ObjLoc, 0)
+	for _, i := range first {
+		for _, j := range second {
 			if lf.matrix[i][j].GetType() > FirstDoable {
 				lf.matrix[i][j].(DoableObject).Do(lf, FieldPoint{i, j})
+				continue
+			}
+			if lf.matrix[i][j].GetType() == LimiterT {
+				fmt.Println("Limiter!!")
+				lim = append(lim, ObjLoc{lf.matrix[i][j], FieldPoint{i, j}})
+				continue
 			}
 		}
+	}
+
+	for i := range lim {
+		lim[i].fo.(*Limiter).Restruct(lf, lim[i].po)
 	}
 }
 

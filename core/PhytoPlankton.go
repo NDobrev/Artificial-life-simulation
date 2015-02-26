@@ -38,8 +38,8 @@ type LightSensitivePlankton struct {
 func NewLightSensitivePlankton() *LightSensitivePlankton {
 	result := new(LightSensitivePlankton)
 	result.age = 0
-	result.deadTime = 30
-	result.reproductionTime = 9
+	result.deadTime = 70
+	result.reproductionTime = 25
 	result.lightPreferenceMin = 0
 	result.lightPreferenceMax = 5
 	result.mutationRate = 15

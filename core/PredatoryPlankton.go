@@ -14,7 +14,7 @@ func NewPredatoryPlankton() *PredatoryPlankton {
 	result := new(PredatoryPlankton)
 	result.age = 0
 	result.deadTime = 10
-	result.reproductionTime = 2
+	result.reproductionTime = 5
 	result.energy = 5
 	result.speed = 7
 	return result

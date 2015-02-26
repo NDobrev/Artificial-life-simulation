@@ -4,6 +4,15 @@ import (
 	"math/rand"
 )
 
+type CellBase interface {
+	GetType() ObjType
+	Do(f FieldBase, myLocation FieldPoint)
+	TimeForDie() bool
+	GetAge() int
+	TimeForReproduce() bool
+	GetDeadTime() int
+}
+
 type Cell struct {
 	age              int
 	deadTime         int
@@ -14,6 +23,10 @@ func NewCell(deadTime int, reproductionTime int) {
 	result := new(Cell)
 	result.deadTime = deadTime
 	result.reproductionTime = reproductionTime
+}
+
+func (c *Cell) GetType() ObjType {
+	return FirstPlankton
 }
 
 func (c *Cell) Do(f FieldBase, myLocation FieldPoint) {
@@ -49,4 +62,8 @@ func (c *Cell) TimeForReproduce() bool {
 
 func (c *Cell) GetAge() int {
 	return c.age
+}
+
+func (c *Cell) GetDeadTime() int {
+	return c.deadTime
 }

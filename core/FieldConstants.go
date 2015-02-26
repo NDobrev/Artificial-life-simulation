@@ -7,6 +7,7 @@ const (
 	FirstStatic
 	// Members of Static family
 	RockT
+	LimiterT
 	LastStatic
 
 	//Replaceble object
@@ -30,6 +31,8 @@ const (
 	PredatoryPlanktonT
 
 	LastPlankton
+
+	SwarmUnitT
 
 	LastMovable
 

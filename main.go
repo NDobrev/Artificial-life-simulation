@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"runtime"
 	"strconv"
+	//	"time"
 )
 
 type FieldColorRepresentation struct {
@@ -66,7 +67,7 @@ func SendRequest(r *http.Request, t core.ObjType) {
 func StartGuiServer() {
 	var s server.Server
 	req = snInit()
-	colors = MakeMatrix(140, 140)
+	colors = MakeMatrix(Size, Size)
 	matrixRequest := func(w http.ResponseWriter, r *http.Request) {
 		// za da moje6 da pra6ta6 kum browser-a response, 4e ima nqkvi security gluposti koit pre4at
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -101,6 +102,18 @@ func StartGuiServer() {
 		SendRequest(r, core.PredatoryPlanktonT)
 	}
 
+	Limiter := func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("New Limiter")
+		SendRequest(r, core.LimiterT)
+	}
+
+	Swarm := func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("New Limiter")
+		SendRequest(r, core.SwarmUnitT)
+	}
+
+	s.RegisterFunc("/Swarm", Swarm)
+	s.RegisterFunc("/Limiter", Limiter)
 	s.RegisterFunc("/CommonPhytoPlankton", CommonPhytoPlankton)
 	s.RegisterFunc("/LightSensitivePlankton", LightSensitivePlankton)
 	s.RegisterFunc("/ZooPlankton", ZooPlankton)
@@ -144,26 +157,34 @@ func Execute(f core.FieldBase, ord ObjectRequestData) {
 		fo = core.NewRock()
 	case core.Empty:
 		fo = core.NewEmptyPlace()
+	case core.LimiterT:
+		fo = core.NewLimiter(140, 3500)
+	case core.SwarmUnitT:
+		fo = core.NewSwarmUnit()
 	}
 	f.RemoveFrom(*fp)
 	f.AddObject(*fp, fo)
 }
 
+var Size int
+
 func main() {
+	Size = 150
 	runtime.GOMAXPROCS(4)
 	fmt.Println("start")
-	a := core.NewLitFieldWithFillWithFunction(140, SumMod20)
+	a := core.NewLitFieldWithFillWithFunction(Size, SumMod20)
 	StartGuiServer()
 
 	fmt.Println("startGUIServer done")
 	fmt.Println("Init field done")
-
+	//<-time.after(time.Nanosecond * 1)
 	for {
 		b := true
 		a.ClearField()
 		for b {
 			select {
 			case _ = <-req.update:
+				fmt.Println("UpdateReq")
 				a.ColorRepresentation(colors.Colors)
 				req.rdy <- struct{}{}
 			case _ = <-req.reset:
@@ -171,6 +192,8 @@ func main() {
 				a.ClearField()
 			case obj := <-req.setReq:
 				Execute(a, obj)
+				//case <-time.After(time.Nanosecond * 1):
+				//	fmt.Println("NextInteration")
 			}
 			//fmt.Println(i)
 			a.OnTick()

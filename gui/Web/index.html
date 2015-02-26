@@ -10,8 +10,8 @@
         $(document).ready(function () {
             var canvas = $('#field').get(0);
 
-            canvas.width = 800;
-            canvas.height = 800;
+            canvas.width = 1000;
+            canvas.height = 1000;
 
             var ctx = canvas.getContext('2d');
             ctx.fillStyle = "#000000";
@@ -59,6 +59,22 @@
 
             $('.reset').click(function() {
                 $.post(URL + 'reset');
+            });
+
+            $('.Swarm').click(function() {
+                var butx = document.getElementById("ByX");
+                var buty = document.getElementById("ByY");
+                var xx = butx.value;
+                var yy = buty.value;
+                $.post(URL + 'Swarm', {x: xx,y: yy}, "json");
+            });
+
+             $('.Limiter').click(function() {
+                var butx = document.getElementById("ByX");
+                var buty = document.getElementById("ByY");
+                var xx = butx.value;
+                var yy = buty.value;
+                $.post(URL + 'Limiter', {x: xx,y: yy}, "json");
             });
 
 
@@ -143,6 +159,8 @@
     <button class='LightSensitivePlankton'>LightSensitivePlankton</button>
     <button class='ZooPlankton'>ZooPlankton</button>
     <button class='PredatoryPlankton'>PredatoryPlankton</button> 
+    <button class='Limiter'>Limiter</button> 
+    <button class='Swarm'>Swarm</button> 
     </br></br>
     X: <input type="text" Id="ByX">
     Y: <input type="text" id="ByY">
