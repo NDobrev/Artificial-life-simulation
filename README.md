@@ -2,7 +2,10 @@
 
 ## Install
 ```
-  go get "https://github.com/NDobrev/Artificial-life-simulation.git"
+ git clone https://github.com/NDobrev/Artificial-life-simulation.git
+ 
+ Windows: just start Build_x64.bat or Build_x86.bat and  start gui/web/index.html
+ Linux/Mac: build manual main.go and start gui/web/index.html
  ```
   
 ## Usage
